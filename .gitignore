@@ -1,0 +1,10 @@
+# Terraform
+.terraform/
+*.tfstate*
+
+# Ansible
+*.retry
+
+# OS/Python
+__pycache__/
+.DS_Store
