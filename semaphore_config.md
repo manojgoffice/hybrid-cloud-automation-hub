@@ -1,10 +1,11 @@
-### 🎡 Semaphore Task Template: Monthly Patching & Compliance
-**Objective:** Standardize OS updates across 200+ Hybrid Nodes.
+### 🎡 Semaphore Task: Automated Container Remediation
+This template ensures zero-downtime for containerized services across AWS and local HPE clusters.
 
-| Field | Configuration |
+| Feature | Configuration |
 | :--- | :--- |
-| **Playbook** | `ansible/playbooks/prod_patching.yml` |
-| **Inventory** | `Hybrid_Inventory` (AWS + On-Prem) |
-| **Environment** | `Production_Vars` (Injects Secure API Keys) |
-| **Cron Schedule** | `0 0 1 * *` (Runs 1st of every month at midnight) |
-| **Arguments** | `--extra-vars "target=all" --diff` |
+| **Schedule** | Every 5 Minutes (`*/5 * * * *`) |
+| **Task** | `scripts/docker_health_monitor.sh` |
+| **Target** | All Docker-enabled nodes (Hybrid Inventory) |
+| **Failure Alert** | Webhook to Slack/Teams (If a container fails to restart) |
+
+**Key Professional Benefit:** "By moving the watchdog logic to Semaphore, I created a centralized audit trail. Unlike local 'restart: always' policies, Semaphore logs provide data on *why* and *when* containers are failing, enabling root-cause analysis."
