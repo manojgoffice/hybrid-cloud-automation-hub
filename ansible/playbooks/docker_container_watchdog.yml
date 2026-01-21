@@ -1,0 +1,26 @@
+---
+- name: 🐳 Hybrid Docker Health Watchdog
+  hosts: all
+  become: yes
+  tasks:
+    - name: 🔍 Identify Unhealthy or Stopped Containers
+      community.docker.docker_container_info:
+        name: "{{ item }}"
+      loop: "{{ container_list }}"
+      register: container_info
+
+    - name: 🚀 Restart Container if Status is not 'running'
+      community.docker.docker_container:
+        name: "{{ item.item }}"
+        state: started
+        restart: yes
+      when: 
+        - item.exists == true
+        - item.container.State.Status != 'running'
+      loop: "{{ container_info.results }}"
+      notify: "Log Container Recovery"
+
+  handlers:
+    - name: "Log Container Recovery"
+      debug:
+        msg: "RECOVERY: A container was found in a failed state and successfully restarted."
