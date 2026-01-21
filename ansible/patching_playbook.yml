@@ -1,0 +1,28 @@
+---
+- name: Enterprise OS Patching and Security Hardening
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure all packages are at the latest version (Patching)
+      yum:
+        name: "*"
+        state: latest
+      when: ansible_os_family == "RedHat"
+
+    - name: Compliance - Disable Root Login via SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: 'PermitRootLogin no'
+      notify: Restart SSH
+
+    - name: Install Cloud Monitoring Agents (Prometheus Node Exporter)
+      yum:
+        name: golang-github-prometheus-node-exporter
+        state: present
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: sshd
+        state: restarted
