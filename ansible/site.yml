@@ -1,6 +1,23 @@
 ---
-- name: Global Infrastructure Orchestration
-  import_playbook: playbooks/server_hardening.yml
+# Master Orchestration Playbook
+# This playbook ties together the entire Hybrid estate (AWS + HPE)
 
-- name: Application Environment Setup
+- name: 🛡️ PHASE 1: Security & Compliance Hardening
+  import_playbook: playbooks/server_hardening.yml
+  tags: [security, compliance]
+
+- name: 📦 PHASE 2: Infrastructure Patching & Updates
   import_playbook: playbooks/patching_playbook.yml
+  tags: [maintenance, patching]
+
+- name: 🐳 PHASE 3: Container Orchestration & Health
+  import_playbook: playbooks/docker_container_watchdog.yml
+  tags: [docker, self-healing]
+
+- name: 💾 PHASE 4: Disaster Recovery & Backups
+  import_playbook: playbooks/generic_backup.yml
+  tags: [backup, dr]
+
+- name: 🔍 PHASE 5: Post-Deployment Audit
+  import_playbook: playbooks/compliance_audit.yml
+  tags: [audit]
