@@ -1,0 +1,29 @@
+---
+- name: Enterprise Security Hardening & Compliance
+  hosts: all
+  become: yes
+  tasks:
+    - name: 🛡️ Apply Critical OS Security Patches
+      package:
+        name: "*"
+        state: latest
+      when: ansible_os_family in ["RedHat", "Debian"]
+
+    - name: 🔐 SSH Hardening - Disable Root Login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: 'PermitRootLogin no'
+      notify: Restart SSH
+
+    - name: 📊 Setup Observability (Prometheus Node Exporter)
+      package:
+        name: prometheus-node-exporter
+        state: present
+      ignore_errors: yes
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: sshd
+        state: restarted
