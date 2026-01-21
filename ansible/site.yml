@@ -1,0 +1,6 @@
+---
+- name: Global Infrastructure Orchestration
+  import_playbook: playbooks/server_hardening.yml
+
+- name: Application Environment Setup
+  import_playbook: playbooks/patching_playbook.yml
