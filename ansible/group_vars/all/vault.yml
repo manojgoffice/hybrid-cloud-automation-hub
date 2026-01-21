@@ -1,0 +1,7 @@
+# This is a sample of how I structure encrypted data.
+# In production, this file is decrypted via the Semaphore Key Store.
+ansible_user: "automation_svc"
+ansible_ssh_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          36323131653434623761366263303964313264663730336237626237666336636665303861343736
+          6238316135313838333130633830313136653931666630320a613665626233376535316439303337
